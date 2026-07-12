@@ -26,3 +26,8 @@ pool.query("SELECT NOW()", (err, res) => {
     console.log("Database connected successfully at:", res.rows[0].now);
   }
 });
+
+// Handle unexpected errors on idle clients to prevent crashing the serverless runtime
+pool.on("error", (err) => {
+  console.error("Unexpected database pool client error:", err.message);
+});
