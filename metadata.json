@@ -1,0 +1,6 @@
+{
+  "name": "TransitOps",
+  "description": "An immersive high-tech bento-grid logistics command center with glassmorphic visuals, telemetry tracking, and dispatch flow controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
