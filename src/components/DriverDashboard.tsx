@@ -94,28 +94,34 @@ export default function DriverDashboard({
     const v = vehicles.find((item) => item.id === issueVehicle);
     if (!v) return;
 
-    // Transition vehicle to repair docks (in-shop status)
-    setVehicles((prev) =>
-      prev.map((item) => (item.id === issueVehicle ? { ...item, status: "in-shop" } : item))
-    );
-
     const mId = `M-${Math.floor(600 + Math.random() * 400)}`;
-    const newMaint: MaintenanceLog = {
-      id: mId,
-      vehicleId: issueVehicle,
-      date: "Just Now",
-      description: `[Driver Report: ${activeDriver.name}] ${issueCategory.toUpperCase()} (${issueSeverity.toUpperCase()} urgency): ${issueDesc}`,
-      cost: issueSeverity === "high" ? 1850.00 : issueSeverity === "medium" ? 750.00 : 250.00,
-      status: "In-Shop"
-    };
+    const cost = issueSeverity === "high" ? 1850.00 : issueSeverity === "medium" ? 750.00 : 250.00;
+    const description = `[Driver Report: ${activeDriver.name}] ${issueCategory.toUpperCase()} (${issueSeverity.toUpperCase()} urgency): ${issueDesc}`;
 
-    setMaintenanceLogs((prev) => [newMaint, ...prev]);
-    addToast(`COMPLIANCE DISPATCHED: Issue registered. ${v.name} redirected to Repair Hub.`, "success");
-    playSound("success");
-
-    // Clear form
-    setIssueVehicle("");
-    setIssueDesc("");
+    fetch("/api/maintenance-logs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: mId,
+        vehicleId: issueVehicle,
+        date: "Just Now",
+        description,
+        cost,
+        status: "In-Shop"
+      })
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to submit maintenance log");
+        addToast(`COMPLIANCE DISPATCHED: Issue registered. ${v.name} redirected to Repair Hub.`, "success");
+        playSound("success");
+        setIssueVehicle("");
+        setIssueDesc("");
+      })
+      .catch((err) => {
+        playSound("error");
+        addToast(err.message || "Failed to submit issue", "error");
+      });
   };
 
   // --- SUBMIT FUEL/CHARGING RECEIPT ---
@@ -133,25 +139,31 @@ export default function DriverDashboard({
     if (!targetVehicle) return;
 
     const logId = `F-${Math.floor(500 + Math.random() * 500)}`;
-    const newLog: FuelLog = {
-      id: logId,
-      vehicleId: newLogVehicle,
-      date: "Just Now",
-      amountAdded: newLogAmount || (targetVehicle.fuelType === "Electric" ? "80 kWh" : "50 Gal"),
-      cost: costNum,
-      location: "Active Field Charging"
-    };
+    const amountAdded = newLogAmount || (targetVehicle.fuelType === "Electric" ? "80 kWh" : "50 Gal");
 
-    // Refill fuel level in fleet list
-    setVehicles((prev) =>
-      prev.map((v) => (v.id === newLogVehicle ? { ...v, fuelLevel: Math.min(100, v.fuelLevel + 35) } : v))
-    );
-
-    setFuelLogs((prev) => [newLog, ...prev]);
-    addToast(`LOG REGISTERED: Charging/Refuel receipt logged for ${targetVehicle.name}. Cost: $${costNum.toFixed(2)}.`, "success");
-    
-    setNewLogCost("");
-    setNewLogAmount("");
+    fetch("/api/fuel-logs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: logId,
+        vehicleId: newLogVehicle,
+        date: "Just Now",
+        amountAdded,
+        cost: costNum,
+        location: "Active Field Charging"
+      })
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to submit fuel log");
+        addToast(`LOG REGISTERED: Charging/Refuel receipt logged for ${targetVehicle.name}. Cost: $${costNum.toFixed(2)}.`, "success");
+        setNewLogCost("");
+        setNewLogAmount("");
+      })
+      .catch((err) => {
+        playSound("error");
+        addToast(err.message || "Failed to log fuel/charge receipt", "error");
+      });
   };
 
   // Switcher of Driver accounts for demo
