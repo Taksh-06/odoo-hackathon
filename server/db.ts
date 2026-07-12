@@ -5,12 +5,18 @@ dotenv.config();
 // so that database numeric fields map cleanly to numbers in the frontend.
 pg.types.setTypeParser(1700, (val: string) => parseFloat(val));
 const { Pool } = pg;
+const isLocalhost =
+  !process.env.DB_HOST ||
+  process.env.DB_HOST.trim().includes("localhost") ||
+  process.env.DB_HOST.trim().includes("127.0.0.1");
+
 export const pool = new Pool({
-  host: process.env.DB_HOST || "localhost",
+  host: process.env.DB_HOST ? process.env.DB_HOST.trim() : "localhost",
   port: parseInt(process.env.DB_PORT || "5432", 10),
-  database: process.env.DB_NAME || "transitops",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "postgres",
+  database: process.env.DB_NAME ? process.env.DB_NAME.trim() : "transitops",
+  user: process.env.DB_USER ? process.env.DB_USER.trim() : "postgres",
+  password: process.env.DB_PASSWORD ? process.env.DB_PASSWORD.trim() : "postgres",
+  ssl: isLocalhost ? undefined : { rejectUnauthorized: false }
 });
 // Test the connection
 pool.query("SELECT NOW()", (err, res) => {
