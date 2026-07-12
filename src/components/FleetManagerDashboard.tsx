@@ -191,7 +191,7 @@ export default function FleetManagerDashboard({
         
         {/* Card 1: Fleet Utilization */}
         <div className="transition-all duration-500 ease-out h-full flex flex-col opacity-100 scale-100 border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] rounded-2xl overflow-hidden">
-          <div className="bg-[#090b1c]/80 backdrop-blur-xl p-5 rounded-2xl border border-slate-800 flex items-center justify-between h-full relative overflow-hidden group">
+          <div className="bg-white/80 dark:bg-[#090b1c]/80 backdrop-blur-xl p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between h-full relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition-all duration-500" />
             <div className="space-y-1.5">
               <span className="text-[10px] font-mono text-cyan-400 tracking-wider flex items-center gap-1.5">
@@ -199,12 +199,12 @@ export default function FleetManagerDashboard({
                 FLEET UTILIZATION
               </span>
               <div className="flex items-baseline gap-2">
-                <h2 className="text-3xl font-display font-black text-white tracking-tight">{utilizationRate}%</h2>
+                <h2 className="text-3xl font-display font-black text-slate-900 dark:text-white tracking-tight">{utilizationRate}%</h2>
                 <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-0.5">
                   <TrendingUp className="w-3 h-3" /> +3.8%
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Total operational vehicle efficiency threshold.</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400">Total operational vehicle efficiency threshold.</p>
             </div>
 
             {/* Graphical Circular Indicator */}
@@ -223,7 +223,7 @@ export default function FleetManagerDashboard({
                   strokeLinecap="round"
                 />
               </svg>
-              <div className="absolute inset-0 flex items-center justify-center text-[10px] font-mono text-slate-300">
+              <div className="absolute inset-0 flex items-center justify-center text-[10px] font-mono text-slate-700 dark:text-slate-300">
                 {vehicles.filter(v => v.status === "on-trip").length}/{vehicles.length}
               </div>
             </div>
@@ -232,7 +232,7 @@ export default function FleetManagerDashboard({
 
         {/* Card 2: Active Vehicles */}
         <div className="transition-all duration-500 ease-out h-full flex flex-col opacity-100 scale-100 border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] rounded-2xl overflow-hidden">
-          <div className="bg-[#090b1c]/80 backdrop-blur-xl p-5 rounded-2xl border border-slate-800 flex items-center justify-between h-full relative overflow-hidden group">
+          <div className="bg-white/80 dark:bg-[#090b1c]/80 backdrop-blur-xl p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between h-full relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-all duration-500" />
             <div className="space-y-1.5 w-full">
               <span className="text-[10px] font-mono text-indigo-400 tracking-wider flex items-center gap-1.5">
@@ -240,8 +240,8 @@ export default function FleetManagerDashboard({
                 ACTIVE VEHICLES
               </span>
               <div className="flex items-baseline gap-2">
-                <h2 className="text-3xl font-display font-black text-white tracking-tight">
-                  {activeVehCount} <span className="text-xs text-slate-500 font-normal">/ {vehicles.length} active</span>
+                <h2 className="text-3xl font-display font-black text-slate-900 dark:text-white tracking-tight">
+                  {activeVehCount} <span className="text-xs text-slate-600 dark:text-slate-400 font-normal">/ {vehicles.length} active</span>
                 </h2>
               </div>
               
@@ -261,7 +261,7 @@ export default function FleetManagerDashboard({
                   />
                 ))}
               </div>
-              <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-1">
+              <div className="flex justify-between items-center text-[10px] font-mono text-slate-600 dark:text-slate-400 pt-1">
                 <span>{activeVehCount} on road</span>
                 <span>{inShopCount} in service docks</span>
               </div>
@@ -271,7 +271,7 @@ export default function FleetManagerDashboard({
 
         {/* Card 3: System Cost */}
         <div className="transition-all duration-500 ease-out h-full flex flex-col opacity-100 scale-100 border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] rounded-2xl overflow-hidden">
-          <div className="bg-[#090b1c]/80 backdrop-blur-xl p-5 rounded-2xl border border-slate-800 flex items-center justify-between h-full relative overflow-hidden group">
+          <div className="bg-white/80 dark:bg-[#090b1c]/80 backdrop-blur-xl p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between h-full relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-all duration-500" />
             <div className="space-y-1.5 w-full">
               <span className="text-[10px] font-mono text-emerald-400 tracking-wider flex items-center gap-1.5">
@@ -279,7 +279,7 @@ export default function FleetManagerDashboard({
                 TOTAL EXPENDITURES
               </span>
               <div className="flex items-baseline justify-between">
-                <h2 className="text-3xl font-display font-black text-white tracking-tight">
+                <h2 className="text-3xl font-display font-black text-slate-900 dark:text-white tracking-tight">
                   ${totalFleetCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </h2>
                 <span className="text-[11px] font-mono text-emerald-400">USD</span>
@@ -308,12 +308,12 @@ export default function FleetManagerDashboard({
                   </defs>
                 </svg>
               </div>
-              <div className="flex justify-between items-center text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-800/80 mt-1.5">
+              <div className="flex justify-between items-center text-[10px] font-mono text-slate-600 dark:text-slate-400 pt-1 border-t border-slate-200 dark:border-slate-800/80 mt-1.5">
                 <span>Maint: ${totalMaintCost.toLocaleString()}</span>
                 <span>Fuel: ${totalFuelCost.toLocaleString()}</span>
               </div>
               <div className="mt-2.5 p-2 bg-emerald-950/20 border border-emerald-500/20 rounded-xl">
-                <p className="text-[9.5px] font-mono text-slate-200 text-center leading-relaxed">
+                <p className="text-[9.5px] font-mono text-slate-800 dark:text-slate-200 text-center leading-relaxed">
                   Total Operational Cost = Fuel Logs (${totalFuelCost.toLocaleString()}) + Maintenance Logs (${totalMaintCost.toLocaleString()}) = <span className="text-emerald-400 font-bold">${totalFleetCost.toLocaleString()}</span>
                 </p>
               </div>
@@ -326,15 +326,15 @@ export default function FleetManagerDashboard({
       {/* 2. LEFT FLANK (Asset Registry) */}
       <section id="bento_assets" className="lg:col-span-3 flex flex-col gap-6 h-full">
         <div className="transition-all duration-500 ease-out h-full flex flex-col border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] rounded-3xl overflow-hidden">
-          <div className="bg-[#090b1c]/85 backdrop-blur-xl p-5 rounded-3xl border border-slate-800 flex-1 flex flex-col gap-4">
+          <div className="bg-white/85 dark:bg-[#090b1c]/85 backdrop-blur-xl p-5 rounded-3xl border border-slate-200 dark:border-slate-800 flex-1 flex flex-col gap-4">
             
             {/* Box Title */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-300 flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <Truck className="w-4 h-4 text-cyan-400" />
                 FLEET REGISTRY
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
                 {vehicles.length} Vehicles
               </span>
             </div>
@@ -346,13 +346,13 @@ export default function FleetManagerDashboard({
                 return (
                   <div 
                     key={v.id} 
-                    className="p-3 bg-slate-950/40 rounded-xl border border-slate-800/60 hover:border-cyan-500/30 transition-all duration-300 group flex flex-col gap-2 relative overflow-hidden"
+                    className="p-3 bg-slate-50/40 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800/60 hover:border-cyan-500/30 transition-all duration-300 group flex flex-col gap-2 relative overflow-hidden"
                   >
                     <div className="absolute inset-y-0 left-0 w-1 bg-transparent group-hover:bg-cyan-500 transition-colors" />
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="text-xs font-display font-semibold text-slate-100">{v.name}</h4>
-                        <span className="text-[9px] font-mono text-slate-500 tracking-wider">
+                        <h4 className="text-xs font-display font-semibold text-slate-900 dark:text-slate-100">{v.name}</h4>
+                        <span className="text-[9px] font-mono text-slate-600 dark:text-slate-400 tracking-wider">
                           ID: {v.id} // {v.type}
                         </span>
                       </div>
@@ -378,13 +378,13 @@ export default function FleetManagerDashboard({
 
                     {/* Power Level Indicator Gauge */}
                     <div className="space-y-1">
-                      <div className="flex justify-between items-center text-[9px] font-mono text-slate-400">
+                      <div className="flex justify-between items-center text-[9px] font-mono text-slate-600 dark:text-slate-400">
                         <span>{v.fuelType === "Electric" ? "BATTERY STATE" : "DIESEL LVL"}</span>
-                        <span className={isLowBattery ? "text-red-400 animate-pulse font-bold" : "text-slate-300"}>
+                        <span className={isLowBattery ? "text-red-400 animate-pulse font-bold" : "text-slate-700 dark:text-slate-300"}>
                           {v.fuelLevel}%
                         </span>
                       </div>
-                      <div className="h-1 w-full bg-slate-900 rounded-full overflow-hidden">
+                      <div className="h-1 w-full bg-white dark:bg-slate-900 rounded-full overflow-hidden">
                         <div 
                           className={`h-full rounded-full transition-all duration-500 ${
                             isLowBattery 
@@ -399,7 +399,7 @@ export default function FleetManagerDashboard({
                     </div>
 
                     {/* Small Quick-Action Repair link */}
-                    <div className="flex items-center justify-between text-[9px] font-mono text-slate-500 border-t border-slate-900 pt-1.5 mt-0.5">
+                    <div className="flex items-center justify-between text-[9px] font-mono text-slate-600 dark:text-slate-400 border-t border-slate-300 dark:border-slate-900 pt-1.5 mt-0.5">
                       <span>NEXT SVC: {v.nextService}</span>
                       {v.status !== "in-shop" && (
                         <button 
@@ -416,12 +416,12 @@ export default function FleetManagerDashboard({
             </div>
 
             {/* Roster Drivers List */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2 pt-2">
-              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-300 flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2 pt-2">
+              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <User className="w-4 h-4 text-indigo-400" />
                 DRIVER ROSTER
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
                 {drivers.length} Drivers
               </span>
             </div>
@@ -433,7 +433,7 @@ export default function FleetManagerDashboard({
                 return (
                   <div 
                     key={d.id}
-                    className={`p-3 bg-slate-950/40 rounded-xl border border-slate-800/60 hover:border-indigo-500/30 transition-all duration-300 flex items-start gap-2.5 relative ${
+                    className={`p-3 bg-slate-50 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800/60 hover:border-indigo-500/30 transition-all duration-300 flex items-start gap-2.5 relative ${
                       isSuspended ? "opacity-60 saturate-50 border-red-500/20" : ""
                     }`}
                   >
@@ -443,7 +443,7 @@ export default function FleetManagerDashboard({
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-display font-semibold text-slate-100 truncate">{d.name}</h4>
+                        <h4 className="text-xs font-display font-semibold text-slate-900 dark:text-slate-100 truncate">{d.name}</h4>
                         <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${
                           d.status === "available"
                             ? "bg-emerald-950/60 border-emerald-500/20 text-emerald-400"
@@ -455,7 +455,7 @@ export default function FleetManagerDashboard({
                         </span>
                       </div>
 
-                      <div className="flex justify-between items-center mt-1 text-[9px] font-mono text-slate-400">
+                      <div className="flex justify-between items-center mt-1 text-[9px] font-mono text-slate-600 dark:text-slate-400">
                         <span>LIC: {d.licenseType}</span>
                         <span className="text-amber-400 font-semibold">★ {d.rating}</span>
                       </div>
@@ -463,11 +463,11 @@ export default function FleetManagerDashboard({
                       {/* Hours of Service Progress bar */}
                       {!isSuspended && (
                         <div className="space-y-0.5 mt-1.5">
-                          <div className="flex justify-between items-center text-[8px] font-mono text-slate-500">
+                          <div className="flex justify-between items-center text-[8px] font-mono text-slate-600 dark:text-slate-400">
                             <span>SHIFT LIMIT REMAINING</span>
                             <span>{d.hoursRemaining} hrs / 14</span>
                           </div>
-                          <div className="h-0.5 w-full bg-slate-900 rounded-full">
+                          <div className="h-0.5 w-full bg-white dark:bg-slate-900 rounded-full">
                             <div 
                               className={`h-full rounded-full ${d.hoursRemaining <= 4 ? "bg-amber-400" : "bg-indigo-400"}`}
                               style={{ width: `${(d.hoursRemaining / 14) * 100}%` }}
@@ -493,19 +493,19 @@ export default function FleetManagerDashboard({
       {/* 3. CENTERPIECE (OPS RADAR & DISPATCH PROTOCOL) */}
       <section id="bento_radar_center" className="lg:col-span-6 flex flex-col gap-6 h-full min-h-[660px]">
         <div className="transition-all duration-500 ease-out h-full flex flex-col border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] rounded-3xl overflow-hidden">
-          <div className="bg-[#0b0f2a]/90 backdrop-blur-2xl p-6 rounded-3xl border border-cyan-500/20 flex-1 flex flex-col gap-5 relative overflow-hidden shadow-[0_0_35px_rgba(6,182,212,0.04)]">
+          <div className="bg-white/90 dark:bg-[#0b0f2a]/90 backdrop-blur-2xl p-6 rounded-3xl border border-cyan-500/20 flex-1 flex flex-col gap-5 relative overflow-hidden shadow-[0_0_35px_rgba(6,182,212,0.04)]">
             
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-cyan-500/5 rounded-full blur-[80px] pointer-events-none" />
 
             {/* CARD HEADER & DISPATCH INSTRUCTIONS */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <Activity className="w-5 h-5 text-cyan-400 animate-pulse" />
                 <div>
-                  <h3 className="text-xs font-mono font-bold tracking-widest text-slate-200">
+                  <h3 className="text-xs font-mono font-bold tracking-widest text-slate-800 dark:text-slate-200">
                     {isDispatching ? "OPS DISPATCH PANEL" : "FLEET OPERATIONS RADAR"}
                   </h3>
-                  <p className="text-[10px] text-slate-400 font-mono">
+                  <p className="text-[10px] text-slate-600 dark:text-slate-400 font-mono">
                     {isDispatching ? "COMPLIANCE & ROUTE ASSESSMENT INITIALIZATION" : "LIVE SATELLITE HUD // ACTIVE TRAFFIC NETWORK"}
                   </p>
                 </div>
@@ -517,7 +517,7 @@ export default function FleetManagerDashboard({
                     setIsDispatching(false);
                     playSound("click");
                   }}
-                  className="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 rounded-lg border border-slate-800 text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1 bg-white dark:bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-800 dark:text-slate-200 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-mono transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" /> ESCAPE PROTOCOL
                 </button>
@@ -539,7 +539,7 @@ export default function FleetManagerDashboard({
               <div className="flex-1 flex flex-col gap-4">
                 
                 {/* Map Canvas Wrapper */}
-                <div className="relative border border-slate-800/80 rounded-2xl bg-slate-950/60 p-4 overflow-hidden h-[340px] flex flex-col items-center justify-center">
+                <div className="relative border border-slate-200 dark:border-slate-800/80 rounded-2xl bg-slate-50/60 dark:bg-slate-950/60 p-4 overflow-hidden h-[340px] flex flex-col items-center justify-center">
                   
                   {/* SVG Map Container */}
                   <svg className="w-full h-full min-h-[300px]" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet">
@@ -610,18 +610,18 @@ export default function FleetManagerDashboard({
 
                   {/* Selected Terminal Hub Card Popup */}
                   {activeMapHub && (
-                    <div className="absolute top-4 left-4 bg-slate-950/90 border border-cyan-500/40 p-3 rounded-xl backdrop-blur-xl w-60 z-10 transition-all duration-300">
+                    <div className="absolute top-4 left-4 bg-slate-50/90 dark:bg-slate-50/90 dark:bg-slate-950/90 border border-cyan-500/40 p-3 rounded-xl backdrop-blur-xl w-60 z-10 transition-all duration-300">
                       <span className="text-[9px] font-mono text-cyan-400 tracking-widest block">NETWORK TERMINAL NODE</span>
-                      <h4 className="text-sm font-display font-bold text-white">{activeMapHub.name}</h4>
-                      <p className="text-[10px] text-slate-400 mt-1 font-mono">Location: {activeMapHub.city}, USA</p>
-                      <div className="border-t border-slate-900 mt-2 pt-2 flex justify-between text-[9px] font-mono text-slate-500">
+                      <h4 className="text-sm font-display font-bold text-slate-900 dark:text-white">{activeMapHub.name}</h4>
+                      <p className="text-[10px] text-slate-600 dark:text-slate-400 mt-1 font-mono">Location: {activeMapHub.city}, USA</p>
+                      <div className="border-t border-slate-300 dark:border-slate-900 mt-2 pt-2 flex justify-between text-[9px] font-mono text-slate-600 dark:text-slate-400">
                         <span>INBOUND: {activeTrips.filter(t => t.destination === activeMapHub.id).length}</span>
                         <span>OUTBOUND: {activeTrips.filter(t => t.source === activeMapHub.id).length}</span>
                       </div>
                     </div>
                   )}
 
-                  <div className="absolute bottom-3 left-4 text-[9px] font-mono text-slate-500 flex gap-4">
+                  <div className="absolute bottom-3 left-4 text-[9px] font-mono text-slate-600 dark:text-slate-400 flex gap-4">
                     <span>RADAR: PASSIVE SCANNING</span>
                     <span>RESOLUTION: 1.25MCDL</span>
                     <span>SYS COORD: 34.0522° N, 118.2437° W</span>
@@ -630,9 +630,9 @@ export default function FleetManagerDashboard({
 
                 {/* ACTIVE SHIPMENTS GRID LIST */}
                 <div className="flex-1 flex flex-col gap-2.5">
-                  <h4 className="text-[10px] font-mono text-slate-400 tracking-wider">ACTIVE ROUTE PIPELINES ({activeTrips.length})</h4>
+                  <h4 className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider">ACTIVE ROUTE PIPELINES ({activeTrips.length})</h4>
                   {activeTrips.length === 0 ? (
-                    <div className="flex-1 border border-dashed border-slate-800 rounded-xl flex flex-col items-center justify-center p-8 text-center text-slate-500">
+                    <div className="flex-1 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl flex flex-col items-center justify-center p-8 text-center text-slate-600 dark:text-slate-400">
                       <Navigation className="w-8 h-8 text-slate-600 mb-2" />
                       <span className="text-xs font-mono font-medium">No shipments currently in transit across operations map.</span>
                       <p className="text-[10px] text-slate-600 mt-1">Initiate a Launch Dispatch sequence to deploy fleet vehicles.</p>
@@ -643,21 +643,21 @@ export default function FleetManagerDashboard({
                         const v = vehicles.find((item) => item.id === trip.vehicleId);
                         const d = drivers.find((item) => item.id === trip.driverId);
                         return (
-                          <div key={trip.id} className="p-3 bg-slate-950/50 rounded-xl border border-slate-800/80 flex flex-col gap-2 relative overflow-hidden">
+                          <div key={trip.id} className="p-3 bg-slate-50/50 dark:bg-slate-50/50 dark:bg-slate-950/50 rounded-xl border border-slate-200 dark:border-slate-800/80 flex flex-col gap-2 relative overflow-hidden">
                             <div className="absolute bottom-0 left-0 h-0.5 bg-cyan-400 transition-all duration-300" style={{ width: `${trip.progress}%` }} />
                             <div className="flex justify-between items-center text-[10px] font-mono">
                               <span className="text-cyan-400 font-bold">{trip.id}</span>
-                              <span className="text-slate-400">{trip.speed} mph</span>
+                              <span className="text-slate-600 dark:text-slate-400">{trip.speed} mph</span>
                             </div>
                             <div className="flex items-center justify-between text-xs font-display font-medium">
                               <div className="flex items-center gap-1">
-                                <span className="text-white">{trip.source}</span>
+                                <span className="text-slate-900 dark:text-white">{trip.source}</span>
                                 <ArrowRight className="w-3 h-3 text-cyan-500" />
-                                <span className="text-white">{trip.destination}</span>
+                                <span className="text-slate-900 dark:text-white">{trip.destination}</span>
                               </div>
                               <span className="text-[10px] text-cyan-400 font-mono">{Math.round(trip.progress)}%</span>
                             </div>
-                            <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 border-t border-slate-900 pt-1.5">
+                            <div className="flex justify-between items-center text-[9px] font-mono text-slate-600 dark:text-slate-400 border-t border-slate-300 dark:border-slate-900 pt-1.5">
                               <span className="truncate max-w-[110px]">Vehicle: {v ? v.name : trip.vehicleId}</span>
                               <span className="truncate max-w-[90px]">Driver: {d ? d.name.split(" ")[1] : trip.driverId}</span>
                             </div>
@@ -672,19 +672,19 @@ export default function FleetManagerDashboard({
             ) : (
               
               // ==================== DISPATCH INLINE FORM VIEW ====================
-              <form onSubmit={handleLaunchDispatch} className="flex-1 flex flex-col gap-4 text-slate-200">
+              <form onSubmit={handleLaunchDispatch} className="flex-1 flex flex-col gap-4 text-slate-800 dark:text-slate-200">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   
                   {/* Source Hub Selection */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-slate-400 tracking-wider block">DISPATCH SOURCE PORT</label>
+                    <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider block">DISPATCH SOURCE PORT</label>
                     <select 
                       value={sourceHub} 
                       onChange={(e) => {
                         setSourceHub(e.target.value);
                         playSound("click");
                       }}
-                      className="w-full bg-slate-950 border border-slate-800 hover:border-cyan-500/20 px-3 py-2 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/20 px-3 py-2 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
                     >
                       {HUBS.map((h) => (
                         <option key={h.id} value={h.id}>{h.city} ({h.id})</option>
@@ -694,14 +694,14 @@ export default function FleetManagerDashboard({
 
                   {/* Destination Hub Selection */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-slate-400 tracking-wider block">TARGET DESTINATION PORT</label>
+                    <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider block">TARGET DESTINATION PORT</label>
                     <select 
                       value={destinationHub} 
                       onChange={(e) => {
                         setDestinationHub(e.target.value);
                         playSound("click");
                       }}
-                      className="w-full bg-slate-950 border border-slate-800 hover:border-cyan-500/20 px-3 py-2 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/20 px-3 py-2 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
                     >
                       {HUBS.map((h) => (
                         <option key={h.id} value={h.id}>{h.city} ({h.id})</option>
@@ -711,7 +711,7 @@ export default function FleetManagerDashboard({
 
                   {/* Fleet Vehicle Selection */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-slate-400 tracking-wider flex justify-between">
+                    <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider flex justify-between">
                       <span>FLEET VEHICLE ASSIGNMENT</span>
                       <span className="text-cyan-500">MAX CAPACITY LIMIT</span>
                     </label>
@@ -721,7 +721,7 @@ export default function FleetManagerDashboard({
                         setSelectedVehicle(e.target.value);
                         playSound("click");
                       }}
-                      className="w-full bg-slate-950 border border-slate-800 hover:border-cyan-500/20 px-3 py-2 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/20 px-3 py-2 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
                     >
                       <option value="">-- Assign Vehicle --</option>
                       {vehicles.map((v) => (
@@ -734,7 +734,7 @@ export default function FleetManagerDashboard({
 
                   {/* Driver CDL Assignment */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-slate-400 tracking-wider flex justify-between">
+                    <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider flex justify-between">
                       <span>OPERATOR CDL ASSIGNMENT</span>
                       <span className="text-indigo-400">CREDENTIAL VERIFICATION</span>
                     </label>
@@ -744,7 +744,7 @@ export default function FleetManagerDashboard({
                         setSelectedDriver(e.target.value);
                         playSound("click");
                       }}
-                      className="w-full bg-slate-950 border border-slate-800 hover:border-indigo-500/20 px-3 py-2 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-indigo-500/20 px-3 py-2 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"
                     >
                       <option value="">-- Assign Driver --</option>
                       {drivers.map((d) => (
@@ -757,19 +757,19 @@ export default function FleetManagerDashboard({
 
                   {/* Cargo Specifications */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-slate-400 tracking-wider block">CARGO SPECIFICATIONS / INVENTORY</label>
+                    <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider block">CARGO SPECIFICATIONS / INVENTORY</label>
                     <input 
                       type="text"
                       placeholder="e.g. Semiconductor Wafers, Solid-State Packs"
                       value={cargoDesc}
                       onChange={(e) => setCargoDesc(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 px-3 py-2 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-cyan-500 transition-colors placeholder:text-slate-600"
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-2 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition-colors placeholder:text-slate-600"
                     />
                   </div>
 
                   {/* Cargo Weight Gauge */}
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-slate-400 tracking-wider flex justify-between">
+                    <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider flex justify-between">
                       <span>CARGO STRUCTURAL LOAD WEIGHT</span>
                       <span className="text-amber-500 font-bold">{cargoWeight.toLocaleString()} KG</span>
                     </label>
@@ -782,15 +782,15 @@ export default function FleetManagerDashboard({
                       onChange={(e) => {
                         setCargoWeight(parseInt(e.target.value));
                       }}
-                      className="w-full accent-cyan-500 bg-slate-900 rounded-lg h-1"
+                      className="w-full accent-cyan-500 bg-white dark:bg-slate-900 rounded-lg h-1"
                     />
                   </div>
 
                 </div>
 
                 {/* ================= COMPLIANCE GAUGES CHECKLIST ================= */}
-                <div className="p-4 bg-slate-950/60 rounded-2xl border border-slate-900 space-y-3.5 mt-2">
-                  <span className="text-[10px] font-mono text-slate-500 tracking-widest block border-b border-slate-900 pb-1.5">
+                <div className="p-4 bg-slate-50/60 dark:bg-slate-950/60 rounded-2xl border border-slate-300 dark:border-slate-900 space-y-3.5 mt-2">
+                  <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-widest block border-b border-slate-300 dark:border-slate-900 pb-1.5">
                     REAL-TIME COMPLIANCE ENGINE SCANS
                   </span>
                   
@@ -808,8 +808,8 @@ export default function FleetManagerDashboard({
                         </div>
                       )}
                       <div>
-                        <p className="text-[10px] text-slate-300">CDL VALIDITY</p>
-                        <span className="text-[9px] text-slate-500">
+                        <p className="text-[10px] text-slate-700 dark:text-slate-300">CDL VALIDITY</p>
+                        <span className="text-[9px] text-slate-600 dark:text-slate-400">
                           {selectedDriver ? drivers.find(d => d.id === selectedDriver)?.licenseType : "No Driver Assigned"}
                         </span>
                       </div>
@@ -827,8 +827,8 @@ export default function FleetManagerDashboard({
                         </div>
                       )}
                       <div>
-                        <p className="text-[10px] text-slate-300">LOAD TOLERANCE</p>
-                        <span className="text-[9px] text-slate-500">
+                        <p className="text-[10px] text-slate-700 dark:text-slate-300">LOAD TOLERANCE</p>
+                        <span className="text-[9px] text-slate-600 dark:text-slate-400">
                           {selectedVehicle 
                             ? `Max Cap: ${vehicles.find(v => v.id === selectedVehicle)?.capacityMax.toLocaleString()} kg` 
                             : "No Vehicle Assigned"}
@@ -848,8 +848,8 @@ export default function FleetManagerDashboard({
                         </div>
                       )}
                       <div>
-                        <p className="text-[10px] text-slate-300">ROUTE INTEGRITY</p>
-                        <span className="text-[9px] text-slate-500">
+                        <p className="text-[10px] text-slate-700 dark:text-slate-300">ROUTE INTEGRITY</p>
+                        <span className="text-[9px] text-slate-600 dark:text-slate-400">
                           {sourceHub === destinationHub ? "Conflict Nodes" : "Clear Path"}
                         </span>
                       </div>
@@ -866,7 +866,7 @@ export default function FleetManagerDashboard({
                       setIsDispatching(false);
                       playSound("click");
                     }}
-                    className="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white rounded-xl font-bold font-mono text-xs tracking-wider border border-slate-800 transition-colors cursor-pointer"
+                    className="flex-1 py-3 bg-white dark:bg-slate-900 hover:bg-slate-800 text-slate-700 hover:text-slate-900 dark:text-white rounded-xl font-bold font-mono text-xs tracking-wider border border-slate-200 dark:border-slate-800 transition-colors cursor-pointer"
                   >
                     ABORT PROTOCOL
                   </button>
@@ -888,15 +888,15 @@ export default function FleetManagerDashboard({
       {/* 4. RIGHT FLANK (Logistics, Maintenance & Fuel) */}
       <section id="bento_logistics" className="lg:col-span-3 flex flex-col gap-6 h-full">
         <div className="transition-all duration-500 ease-out h-full flex flex-col border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] rounded-3xl overflow-hidden">
-          <div className="bg-[#090b1c]/85 backdrop-blur-xl p-5 rounded-3xl border border-slate-800 flex-1 flex flex-col gap-4">
+          <div className="bg-white/85 dark:bg-[#090b1c]/85 backdrop-blur-xl p-5 rounded-3xl border border-slate-200 dark:border-slate-800 flex-1 flex flex-col gap-4">
             
             {/* Timeline Header */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-300 flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <Wrench className="w-4 h-4 text-amber-500" />
                 MAINTENANCE HUB
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
                 {maintenanceLogs.filter(m => m.status !== "Completed").length} Pending
               </span>
             </div>
@@ -906,7 +906,7 @@ export default function FleetManagerDashboard({
               {maintenanceLogs.map((log) => {
                 const targetVeh = vehicles.find((v) => v.id === log.vehicleId);
                 return (
-                  <div key={log.id} className="p-3 bg-slate-950/40 rounded-xl border border-slate-800/60 hover:border-slate-700/60 transition-colors flex gap-2 relative">
+                  <div key={log.id} className="p-3 bg-slate-50/40 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800/60 hover:border-slate-700/60 transition-colors flex gap-2 relative">
                     <div className="flex flex-col items-center gap-1 mt-1 shrink-0">
                       <div className={`w-2.5 h-2.5 rounded-full ${
                         log.status === "In-Shop" 
@@ -921,15 +921,15 @@ export default function FleetManagerDashboard({
                     <div className="flex-1 min-w-0">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h5 className="text-[11px] font-display font-bold text-slate-200">
+                          <h5 className="text-[11px] font-display font-bold text-slate-800 dark:text-slate-200">
                             {targetVeh ? targetVeh.name : log.vehicleId}
                           </h5>
-                          <span className="text-[9px] font-mono text-slate-500">ID: {log.id} // {log.date}</span>
+                          <span className="text-[9px] font-mono text-slate-600 dark:text-slate-400">ID: {log.id} // {log.date}</span>
                         </div>
-                        <span className="text-[11.5px] font-mono font-bold text-slate-200">${log.cost}</span>
+                        <span className="text-[11.5px] font-mono font-bold text-slate-800 dark:text-slate-200">${log.cost}</span>
                       </div>
                       
-                      <p className="text-[10px] text-slate-400 font-mono mt-1.5 leading-relaxed bg-[#0d1127]/20 p-1.5 border border-slate-900 rounded">
+                      <p className="text-[10px] text-slate-600 dark:text-slate-400 font-mono mt-1.5 leading-relaxed bg-slate-100/20 dark:bg-[#0d1127]/20 p-1.5 border border-slate-300 dark:border-slate-900 rounded">
                         {log.description}
                       </p>
 
@@ -948,12 +948,12 @@ export default function FleetManagerDashboard({
             </div>
 
             {/* Fuel and Energy Logs Header */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2 pt-2">
-              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-300 flex items-center gap-2">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2 pt-2">
+              <span className="text-[11px] font-mono font-bold tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
                 <Fuel className="w-4 h-4 text-emerald-500" />
                 CHARGING & FUEL LOGS
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
                 Fuel Ops
               </span>
             </div>
@@ -963,22 +963,22 @@ export default function FleetManagerDashboard({
               {fuelLogs.map((log) => {
                 const targetV = vehicles.find((v) => v.id === log.vehicleId);
                 return (
-                  <div key={log.id} className="p-2.5 bg-slate-950/40 rounded-xl border border-slate-800/60 text-xs font-mono flex items-center justify-between">
+                  <div key={log.id} className="p-2.5 bg-slate-50/40 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800/60 text-xs font-mono flex items-center justify-between">
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-slate-200 text-[10px]">
+                        <span className="font-bold text-slate-800 dark:text-slate-200 text-[10px]">
                           {targetV ? targetV.name.split(" ")[0] : log.vehicleId}
                         </span>
-                        <span className="text-[8px] bg-slate-900 border border-slate-800 px-1 py-0.2 rounded text-slate-500">
+                        <span className="text-[8px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-1 py-0.2 rounded text-slate-600 dark:text-slate-400">
                           {log.id}
                         </span>
                       </div>
-                      <p className="text-[9px] text-slate-500">{log.location} // {log.date}</p>
+                      <p className="text-[9px] text-slate-600 dark:text-slate-400">{log.location} // {log.date}</p>
                     </div>
 
                     <div className="text-right">
                       <span className="text-[10px] text-emerald-400 block font-bold">${log.cost.toFixed(2)}</span>
-                      <span className="text-[8.5px] text-slate-400 block">{log.amountAdded}</span>
+                      <span className="text-[8.5px] text-slate-600 dark:text-slate-400 block">{log.amountAdded}</span>
                     </div>
                   </div>
                 );

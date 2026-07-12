@@ -28,6 +28,10 @@ import FleetManagerDashboard from "./components/FleetManagerDashboard";
 import DriverDashboard from "./components/DriverDashboard";
 import SafetyOfficerDashboard from "./components/SafetyOfficerDashboard";
 import FinancialAnalystDashboard from "./components/FinancialAnalystDashboard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import DashboardLayout from "./components/DashboardLayout";
 
 // --- INITIAL STATE DATASETS ---
 const INITIAL_VEHICLES: Vehicle[] = [
@@ -76,13 +80,13 @@ export default function App() {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   // --- AUTHENTICATION STATES ---
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<{ email: string; role: "manager" | "driver" | "safety" | "finance" } | null>(null);
-
-  // --- LOGIN FORM STATES ---
-  const [loginEmail, setLoginEmail] = useState<string>("ronakskaka08@gmail.com");
-  const [loginPassword, setLoginPassword] = useState<string>("••••••••");
-  const [loginRole, setLoginRole] = useState<"manager" | "driver" | "safety" | "finance">("manager");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    return localStorage.getItem("transitops_auth") === "true";
+  });
+  const [currentUser, setCurrentUser] = useState<{ email: string; role: "manager" | "driver" | "safety" | "finance" } | null>(() => {
+    const saved = localStorage.getItem("transitops_user");
+    return saved ? JSON.parse(saved) : null;
+  });
 
   const [currentTime, setCurrentTime] = useState<string>("");
 
@@ -198,25 +202,19 @@ export default function App() {
   };
 
   // --- AUTH SUBMIT ---
-  const handleLoginSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    playSound("click");
-
-    if (!loginEmail.trim() || !loginPassword.trim()) {
-      playSound("error");
-      addToast("SECURITY ALARM: Credentials validation fields must not be empty.", "error");
-      return;
-    }
-
+  const handleLogin = (email: string, role: "manager" | "driver" | "safety" | "finance") => {
     setIsAuthenticated(true);
-    setCurrentUser({ email: loginEmail, role: loginRole });
-    playSound("success");
-    addToast(`SECURE SESSION REIFIED: Access granted for Operator (${loginEmail}). Protocol level: ${loginRole.toUpperCase()}`, "success");
+    const userObj = { email, role };
+    setCurrentUser(userObj);
+    localStorage.setItem("transitops_auth", "true");
+    localStorage.setItem("transitops_user", JSON.stringify(userObj));
   };
 
   const handleLogOut = () => {
     setIsAuthenticated(false);
     setCurrentUser(null);
+    localStorage.removeItem("transitops_auth");
+    localStorage.removeItem("transitops_user");
     playSound("click");
     addToast("SECURE SESSION TERMINATED: Safe travels operator.", "info");
   };
@@ -284,196 +282,50 @@ export default function App() {
   };
 
   return (
-    <div id="transitops_root" className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative overflow-x-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
-      
-      {/* GLOWING ABSTRACT SPACE-X BACKGROUND BLOBS */}
-      <div className="absolute top-0 left-1/4 w-[450px] h-[450px] bg-indigo-600/10 rounded-full blur-[110px] pointer-events-none" />
-      <div className="absolute bottom-10 right-1/4 w-[550px] h-[550px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute top-1/3 right-12 w-[350px] h-[350px] bg-blue-500/5 rounded-full blur-[90px] pointer-events-none" />
-
-      {/* --- FLOATING TOAST SYSTEM --- */}
-      <div className="fixed top-6 right-6 z-50 flex flex-col gap-3 max-w-md w-full">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={`p-4 rounded-xl border flex items-start gap-3 backdrop-blur-xl transition-all duration-300 animate-slide-in shadow-xl ${
-              t.type === "success"
-                ? "bg-emerald-950/80 border-emerald-500/30 text-emerald-200 shadow-emerald-950/20"
-                : t.type === "error"
-                ? "bg-red-950/80 border-red-500/30 text-red-200 shadow-red-950/20"
-                : t.type === "warning"
-                ? "bg-amber-950/80 border-amber-500/30 text-amber-200 shadow-amber-950/20"
-                : "bg-slate-900/90 border-slate-700/50 text-slate-200"
-            }`}
-          >
-            {t.type === "success" && <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />}
-            {t.type === "error" && <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />}
-            {t.type === "warning" && <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />}
-            {t.type === "info" && <Activity className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />}
-            
-            <div className="flex-1 text-xs leading-relaxed font-mono">
-              {t.message}
-            </div>
-            
-            <button
-              onClick={() => removeToast(t.id)}
-              className="text-slate-400 hover:text-slate-100 transition-colors cursor-pointer"
+    <Router>
+      <div id="transitops_root" className="min-h-screen font-sans">
+        {/* --- FLOATING TOAST SYSTEM --- */}
+        <div className="fixed top-6 right-6 z-50 flex flex-col gap-3 max-w-md w-full">
+          {toasts.map((t) => (
+            <div
+              key={t.id}
+              className={`p-4 rounded-xl border flex items-start gap-3 backdrop-blur-xl transition-all duration-300 animate-slide-in shadow-xl ${
+                t.type === "success"
+                  ? "bg-emerald-950/80 border-emerald-500/30 text-emerald-200 shadow-emerald-950/20"
+                  : t.type === "error"
+                  ? "bg-red-950/80 border-red-500/30 text-red-200 shadow-red-950/20"
+                  : t.type === "warning"
+                  ? "bg-amber-950/80 border-amber-500/30 text-amber-200 shadow-amber-950/20"
+                  : "bg-white dark:bg-white/90 dark:bg-slate-900/90 border-slate-300/50 dark:border-slate-700/50 text-slate-800 dark:text-slate-200"
+              }`}
             >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {!isAuthenticated ? (
-        // ==================== AUTHENTICATION GATEWAY ====================
-        <div className="min-h-screen flex flex-col justify-center items-center p-6">
-          <div className="max-w-md w-full bg-[#090b1c]/80 backdrop-blur-2xl rounded-3xl border border-slate-800/80 p-8 shadow-[0_0_50px_rgba(6,182,212,0.04)] relative overflow-hidden flex flex-col items-center gap-6 z-10 transition-all duration-500">
-            
-            <div className="absolute -top-12 -right-12 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl" />
-            <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl" />
-
-            {/* Logistics Icon Header */}
-            <div className="flex flex-col items-center gap-2">
-              <div className="p-3.5 rounded-2xl bg-cyan-950/30 border border-cyan-500/25 glow-cyan shadow-[0_0_15px_rgba(34,211,238,0.15)]" style={{ animationDuration: "3s" }}>
-                <Compass className="w-8 h-8 text-cyan-400" />
-              </div>
-              <div className="text-center mt-2">
-                <h2 className="font-display font-black text-xl tracking-wider text-white">TRANSITOPS</h2>
-                <span className="text-[9px] font-mono font-bold tracking-widest bg-cyan-950/60 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/20 inline-block mt-1">
-                  OPERATIONS GATEWAY
-                </span>
-              </div>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleLoginSubmit} className="w-full space-y-4 font-mono text-xs">
+              {t.type === "success" && <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />}
+              {t.type === "error" && <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />}
+              {t.type === "warning" && <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />}
+              {t.type === "info" && <Activity className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />}
               
-              <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 tracking-wider block">OPERATOR EMAIL ADDRESS</label>
-                <input 
-                  type="email"
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="name@transitops.com"
-                  className="w-full bg-slate-950 border border-slate-800 hover:border-cyan-500/25 px-3 py-2.5 rounded-xl text-white focus:outline-none focus:border-cyan-500 transition-colors"
-                />
+              <div className="flex-1 text-xs leading-relaxed font-mono">
+                {t.message}
               </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 tracking-wider block">SECURE CREDENTIAL LOCK</label>
-                <input 
-                  type="password"
-                  value={loginPassword}
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-slate-950 border border-slate-800 hover:border-cyan-500/25 px-3 py-2.5 rounded-xl text-white focus:outline-none focus:border-cyan-500 transition-colors"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] text-slate-400 tracking-wider block">OPERATIONAL PROFILE SECURITY ROLE</label>
-                <select 
-                  value={loginRole} 
-                  onChange={(e) => setLoginRole(e.target.value as any)}
-                  className="w-full bg-slate-950 border border-slate-800 hover:border-cyan-500/25 px-3 py-2.5 rounded-xl text-white focus:outline-none focus:border-cyan-500 transition-colors cursor-pointer"
-                >
-                  <option value="manager">Fleet Manager</option>
-                  <option value="driver">Driver Portal</option>
-                  <option value="safety">Safety Officer</option>
-                  <option value="finance">Financial Analyst</option>
-                </select>
-              </div>
-
-              <button 
-                type="submit"
-                className="w-full py-3 bg-cyan-500 text-slate-950 font-black rounded-xl tracking-wider font-mono text-[11px] shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:bg-cyan-400 active:scale-95 transition-all duration-300 mt-2 glow-cyan cursor-pointer"
+              
+              <button
+                onClick={() => removeToast(t.id)}
+                className="text-slate-400 hover:text-slate-900 dark:text-slate-100 transition-colors cursor-pointer"
               >
-                INITIALIZE TRANSIT PROTOCOLS
+                <X className="w-4 h-4" />
               </button>
-
-            </form>
-
-            {/* Secure Handshake Notice */}
-            <div className="text-center text-[9px] text-slate-500 font-mono mt-2 flex items-center justify-center gap-1.5">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>SECURE LINK COMPLIANCE VERIFICATION // [DOT-749]</span>
             </div>
-
-          </div>
+          ))}
         </div>
-      ) : (
-        // ==================== DASHBOARD PORTAL SHELL ====================
-        <>
-          {/* --- HEADER CONTROLS --- */}
-          <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40 px-6 py-4">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-              
-              {/* Logo & Platform Status */}
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-lg bg-cyan-950/40 border border-cyan-500/30 glow-cyan">
-                  <Compass className="w-6 h-6 text-cyan-400 animate-spin" style={{ animationDuration: "20s" }} />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="font-display font-bold text-xl tracking-wider text-white">TRANSITOPS</h1>
-                    <span className="text-[10px] font-mono font-bold tracking-widest bg-cyan-950/60 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-500/20">
-                      V.3.8-PROTOTYPE
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-slate-400 font-mono flex items-center gap-1.5 mt-0.5">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    SYSTEM STATUS: SECURE // {currentTime}
-                  </p>
-                </div>
-              </div>
 
-              {/* User ID & Role Switcher Header */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-                {/* Operator Telemetry Tag */}
-                <div className="flex items-center gap-2.5 bg-[#0d1127]/60 border border-slate-800/80 rounded-xl px-3.5 py-2 text-[11px] font-mono text-slate-400">
-                  <UserCheck className="w-3.5 h-3.5 text-cyan-500" />
-                  <span className="text-slate-500">OPERATOR:</span>
-                  <span className="text-cyan-400 font-bold max-w-[150px] truncate">{currentUser?.email}</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/25 font-bold uppercase">
-                    {currentUser?.role === "manager" ? "Fleet Manager" : currentUser?.role === "driver" ? "Driver Portal" : currentUser?.role === "safety" ? "Safety Officer" : "Financial Analyst"}
-                  </span>
-                </div>
-
-                {/* SECURE LOG OUT BUTTON */}
-                <button
-                  onClick={handleLogOut}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-red-950/30 hover:bg-red-950/50 text-red-400 hover:text-red-300 rounded-xl text-xs font-mono border border-red-500/30 transition-all duration-300 cursor-pointer font-bold shrink-0 shadow-[0_0_10px_rgba(239,68,68,0.05)]"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>LOG OUT</span>
-                </button>
-              </div>
-
-            </div>
-          </header>
-
-          {/* --- MAIN OPERATIONAL AREA --- */}
-          <main className="flex-1 p-6 max-w-[1600px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {renderDashboard()}
-          </main>
-
-          {/* --- BOTTOM SYSTEM BAR (METADATA STATS) --- */}
-          <footer className="border-t border-slate-900 py-3 px-6 bg-slate-950/90 text-slate-500 font-mono text-[9px] z-30">
-            <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row items-center justify-between gap-2 text-center md:text-left">
-              <div className="flex items-center gap-4">
-                <span>SYS: TRANSITOPS LOGISTICS COMMAND CENTER // CONNECTED</span>
-                <span className="hidden sm:inline">● COMPLIANCE SECURE [DOT CERTIFIED]</span>
-                <span className="hidden lg:inline text-cyan-400">● PORT AGGREGATE ENCRYPTED</span>
-              </div>
-              <div>
-                <span>PROT-ENGINE V.3.8 // © {new Date().getFullYear()} TRANSITOPS LOGISTICS PROTOCOLS</span>
-              </div>
-            </div>
-          </footer>
-        </>
-      )}
-
-    </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} addToast={addToast} />} />
+          <Route element={<DashboardLayout currentUser={currentUser} onLogOut={handleLogOut} />}>
+            <Route path="/dashboard" element={renderDashboard()} />
+          </Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }

@@ -164,23 +164,23 @@ export default function DriverDashboard({
   return (
     <>
       {/* 1. TOP SELECTOR AND PERSONAL TELEMETRY */}
-      <div className="lg:col-span-12 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#090b1c]/80 border border-slate-800 p-4 rounded-2xl mb-2">
+      <div className="lg:col-span-12 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white/80 dark:bg-[#090b1c]/80 border border-slate-200 dark:border-slate-800 p-4 rounded-2xl mb-2">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-indigo-950 border border-indigo-500/20 text-indigo-400 rounded-lg">
             <User className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-xs font-mono font-bold text-slate-300">DRIVER ACTIVE CONSOLE LINK</h3>
-            <p className="text-[10px] text-slate-500 font-mono">Operator ID credentials loading dynamically</p>
+            <h3 className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">DRIVER ACTIVE CONSOLE LINK</h3>
+            <p className="text-[10px] text-slate-600 dark:text-slate-400 font-mono">Operator ID credentials loading dynamically</p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono text-slate-400">ACTIVE DRIVER ID:</span>
+          <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400">ACTIVE DRIVER ID:</span>
           <select
             value={activeDriverId}
             onChange={(e) => handleDriverChange(e.target.value)}
-            className="bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"
+            className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500 transition-colors cursor-pointer"
           >
             {drivers.map((d) => (
               <option key={d.id} value={d.id}>
@@ -194,7 +194,7 @@ export default function DriverDashboard({
       <div className="lg:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* Card 1: My Odometer */}
-        <div className="bg-[#090b1c]/80 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] relative overflow-hidden group">
+        <div className="bg-white/80 dark:bg-[#090b1c]/80 backdrop-blur-xl p-6 rounded-2xl border border-cyan-500/20 shadow-[0_0_25px_rgba(6,182,212,0.06)] relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-2xl" />
           <div className="space-y-2">
             <span className="text-[10px] font-mono text-cyan-400 tracking-wider flex items-center gap-1.5">
@@ -202,24 +202,24 @@ export default function DriverDashboard({
               MY ODOMETER & DISTANCE TRACED
             </span>
             <div className="flex items-baseline gap-2 pt-1">
-              <h2 className="text-4xl font-display font-black text-white tracking-tight">
+              <h2 className="text-4xl font-display font-black text-slate-900 dark:text-white tracking-tight">
                 {activeDriverId === "D-201" ? "12,410 km" : activeDriverId === "D-202" ? "14,280 km" : activeDriverId === "D-203" ? "8,100 km" : "11,940 km"}
               </h2>
               <span className="text-[10px] text-emerald-400 font-mono font-bold">
                 {activeDriver.status === "on-trip" ? "ACTIVE TRANSIT" : "ON SHIFT"}
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
               Your estimated mileage on active routes. Next scheduled safety check: <span className="text-cyan-400 font-bold">15,000 km</span>.
             </p>
-            <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden mt-3">
+            <div className="h-1.5 w-full bg-white dark:bg-slate-900 rounded-full overflow-hidden mt-3">
               <div className="h-full rounded-full bg-cyan-400 animate-pulse" style={{ width: "95.2%" }} />
             </div>
           </div>
         </div>
 
         {/* Card 2: Safety Score */}
-        <div className="bg-[#090b1c]/80 backdrop-blur-xl p-6 rounded-2xl border border-indigo-500/20 shadow-[0_0_25px_rgba(99,102,241,0.06)] relative overflow-hidden group">
+        <div className="bg-white/80 dark:bg-[#090b1c]/80 backdrop-blur-xl p-6 rounded-2xl border border-indigo-500/20 shadow-[0_0_25px_rgba(99,102,241,0.06)] relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl" />
           <div className="space-y-2">
             <span className="text-[10px] font-mono text-indigo-400 tracking-wider flex items-center gap-1.5">
@@ -227,7 +227,7 @@ export default function DriverDashboard({
               MY CDL COMPLIANCE & SAFETY SCORE
             </span>
             <div className="flex items-baseline gap-2 pt-1">
-              <h2 className="text-4xl font-display font-black text-white tracking-tight">
+              <h2 className="text-4xl font-display font-black text-slate-900 dark:text-white tracking-tight">
                 {activeDriver.rating >= 4.9 ? "99.2 / 100" : activeDriver.rating >= 4.7 ? "96.5 / 100" : "82.0 / 100"}
               </h2>
               <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono font-bold border ${
@@ -238,22 +238,22 @@ export default function DriverDashboard({
                 {activeDriver.status === "suspended" ? "SUSPENDED" : "GRADE A+"}
               </span>
             </div>
-            <div className="grid grid-cols-3 gap-2 pt-2 text-[10px] font-mono text-slate-400 border-t border-slate-900 mt-2">
+            <div className="grid grid-cols-3 gap-2 pt-2 text-[10px] font-mono text-slate-600 dark:text-slate-400 border-t border-slate-300 dark:border-slate-900 mt-2">
               <div>
-                <span className="block text-slate-500 text-[8px] uppercase">Speed limits</span>
+                <span className="block text-slate-600 dark:text-slate-400 text-[8px] uppercase">Speed limits</span>
                 <span className={activeDriver.status === "suspended" ? "text-red-400" : "text-emerald-400"}>
                   {activeDriver.status === "suspended" ? "74% compliance" : "100% compliant"}
                 </span>
               </div>
               <div>
-                <span className="block text-slate-500 text-[8px] uppercase">Hard brakes</span>
+                <span className="block text-slate-600 dark:text-slate-400 text-[8px] uppercase">Hard brakes</span>
                 <span className="text-amber-400">
                   {activeDriver.status === "suspended" ? "4 Warnings" : "1 Warning"}
                 </span>
               </div>
               <div>
-                <span className="block text-slate-500 text-[8px] uppercase">Active hours</span>
-                <span className="text-slate-300">{activeDriver.hoursRemaining} hrs / 14</span>
+                <span className="block text-slate-600 dark:text-slate-400 text-[8px] uppercase">Active hours</span>
+                <span className="text-slate-700 dark:text-slate-300">{activeDriver.hoursRemaining} hrs / 14</span>
               </div>
             </div>
           </div>
@@ -263,13 +263,13 @@ export default function DriverDashboard({
 
       {/* 2. IN-DEPTH ASSIGNED TRIP ROUTE CARD */}
       <div className="lg:col-span-12">
-        <div className="bg-[#090b1c]/80 backdrop-blur-xl p-6 rounded-3xl border border-slate-800 flex flex-col gap-4">
-          <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
-            <span className="text-xs font-mono font-bold tracking-wider text-slate-200 flex items-center gap-2">
+        <div className="bg-white/80 dark:bg-[#090b1c]/80 backdrop-blur-xl p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
+          <div className="border-b border-slate-200 dark:border-slate-800 pb-3 flex items-center justify-between">
+            <span className="text-xs font-mono font-bold tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <Compass className="w-4 h-4 text-cyan-400 animate-spin" style={{ animationDuration: "12s" }} />
               NEXT ASSIGNED TRIP ROUTE CARD
             </span>
-            <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400 uppercase">
+            <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 uppercase">
               {activeDriver.status === "on-trip" ? "DISPATCHED" : "WAITING IN QUEUE"}
             </span>
           </div>
@@ -278,45 +278,45 @@ export default function DriverDashboard({
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
               
               {/* Trip Metadata (Cols 4) */}
-              <div className="md:col-span-4 space-y-3 font-mono text-xs text-slate-300">
-                <div className="flex justify-between items-center bg-slate-950/60 p-2.5 border border-slate-900 rounded-xl">
-                  <span className="text-slate-500">TRIP ID:</span>
+              <div className="md:col-span-4 space-y-3 font-mono text-xs text-slate-700 dark:text-slate-300">
+                <div className="flex justify-between items-center bg-slate-50/60 dark:bg-slate-950/60 p-2.5 border border-slate-300 dark:border-slate-900 rounded-xl">
+                  <span className="text-slate-600 dark:text-slate-400">TRIP ID:</span>
                   <span className="text-cyan-400 font-bold">{activeTrip.id}</span>
                 </div>
-                <div className="flex justify-between items-center bg-slate-950/60 p-2.5 border border-slate-900 rounded-xl">
-                  <span className="text-slate-500">CARGO VALUE:</span>
-                  <span className="text-white font-bold">{activeTrip.cargo}</span>
+                <div className="flex justify-between items-center bg-slate-50/60 dark:bg-slate-950/60 p-2.5 border border-slate-300 dark:border-slate-900 rounded-xl">
+                  <span className="text-slate-600 dark:text-slate-400">CARGO VALUE:</span>
+                  <span className="text-slate-900 dark:text-white font-bold">{activeTrip.cargo}</span>
                 </div>
-                <div className="flex justify-between items-center bg-slate-950/60 p-2.5 border border-slate-900 rounded-xl">
-                  <span className="text-slate-500">CARGO WEIGHT:</span>
+                <div className="flex justify-between items-center bg-slate-50/60 dark:bg-slate-950/60 p-2.5 border border-slate-300 dark:border-slate-900 rounded-xl">
+                  <span className="text-slate-600 dark:text-slate-400">CARGO WEIGHT:</span>
                   <span className="text-amber-500 font-bold">{activeTrip.weight.toLocaleString()} kg</span>
                 </div>
               </div>
 
               {/* Graphical Route Pipeline (Cols 8) */}
-              <div className="md:col-span-8 p-5 bg-slate-950/60 rounded-2xl border border-slate-900 flex flex-col gap-4">
+              <div className="md:col-span-8 p-5 bg-slate-50/60 dark:bg-slate-950/60 rounded-2xl border border-slate-300 dark:border-slate-900 flex flex-col gap-4">
                 <div className="flex items-center justify-between text-xs font-mono">
                   <div className="flex items-center gap-1">
-                    <span className="text-slate-500">FROM</span>
-                    <span className="text-white font-black bg-slate-900 px-2.5 py-1 rounded border border-slate-800">{activeTrip.source}</span>
+                    <span className="text-slate-600 dark:text-slate-400">FROM</span>
+                    <span className="text-slate-900 dark:text-white font-black bg-white dark:bg-slate-900 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-800">{activeTrip.source}</span>
                   </div>
-                  <div className="flex-1 border-t border-dashed border-slate-800 mx-4 relative">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] text-cyan-400 bg-slate-950 px-2 py-0.5 rounded border border-cyan-500/10 flex items-center gap-1">
+                  <div className="flex-1 border-t border-dashed border-slate-200 dark:border-slate-800 mx-4 relative">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] text-cyan-400 bg-slate-50 dark:bg-slate-950 px-2 py-0.5 rounded border border-cyan-500/10 flex items-center gap-1">
                       <Clock className="w-2.5 h-2.5" /> {activeTrip.speed} mph
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
-                    <span className="text-slate-500">TO</span>
-                    <span className="text-white font-black bg-slate-900 px-2.5 py-1 rounded border border-slate-800">{activeTrip.destination}</span>
+                    <span className="text-slate-600 dark:text-slate-400">TO</span>
+                    <span className="text-slate-900 dark:text-white font-black bg-white dark:bg-slate-900 px-2.5 py-1 rounded border border-slate-200 dark:border-slate-800">{activeTrip.destination}</span>
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex justify-between items-center text-[9px] font-mono text-slate-500">
+                  <div className="flex justify-between items-center text-[9px] font-mono text-slate-600 dark:text-slate-400">
                     <span>TRANSIT PIPELINE PROGRESS</span>
                     <span>{Math.round(activeTrip.progress)}% COMPLETED</span>
                   </div>
-                  <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden">
+                  <div className="h-2 w-full bg-white dark:bg-slate-900 rounded-full overflow-hidden">
                     <div 
                       className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-indigo-500 animate-pulse" 
                       style={{ width: `${activeTrip.progress}%` }} 
@@ -327,7 +327,7 @@ export default function DriverDashboard({
 
             </div>
           ) : (
-            <div className="border border-dashed border-slate-800 rounded-2xl flex flex-col items-center justify-center p-8 text-center text-slate-500">
+            <div className="border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col items-center justify-center p-8 text-center text-slate-600 dark:text-slate-400">
               <Navigation className="w-8 h-8 text-slate-600 mb-2" />
               <span className="text-xs font-mono font-medium">No active transit route pipelines currently dispatched.</span>
               <p className="text-[10px] text-slate-600 mt-1">Status: Standby // Standby at terminal until fleet managers authorize cargo manifests.</p>
@@ -340,22 +340,22 @@ export default function DriverDashboard({
       <div className="lg:col-span-12 grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Card 3: Report Vehicle Issue Form */}
-        <div className="bg-[#090b1c]/85 backdrop-blur-xl p-6 rounded-3xl border border-slate-800 flex flex-col gap-4">
-          <div className="border-b border-slate-800 pb-3">
-            <span className="text-xs font-mono font-bold tracking-wider text-slate-200 flex items-center gap-2">
+        <div className="bg-white/85 dark:bg-[#090b1c]/85 backdrop-blur-xl p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
+          <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
+            <span className="text-xs font-mono font-bold tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-500" />
               REPORT VEHICLE ISSUE
             </span>
-            <p className="text-[10px] text-slate-400 font-mono mt-0.5">Submit immediate maintenance tickets to fleet coordinators.</p>
+            <p className="text-[10px] text-slate-600 dark:text-slate-400 font-mono mt-0.5">Submit immediate maintenance tickets to fleet coordinators.</p>
           </div>
 
           <form onSubmit={handleReportIssue} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono text-slate-400 tracking-wider block">ASSIGNED FLEET VEHICLE</label>
+              <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider block">ASSIGNED FLEET VEHICLE</label>
               <select 
                 value={issueVehicle}
                 onChange={(e) => setIssueVehicle(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 hover:border-cyan-500/20 px-3 py-2.5 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/20 px-3 py-2.5 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 cursor-pointer"
               >
                 <option value="">-- Choose Vehicle --</option>
                 {vehicles.map((v) => (
@@ -368,11 +368,11 @@ export default function DriverDashboard({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-[10px] font-mono text-slate-400 tracking-wider block">ISSUE CATEGORY</label>
+                <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider block">ISSUE CATEGORY</label>
                 <select 
                   value={issueCategory}
                   onChange={(e) => setIssueCategory(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 px-3 py-2.5 rounded-xl text-xs font-mono text-white focus:outline-none cursor-pointer"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-2.5 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none cursor-pointer"
                 >
                   <option value="Brakes">Brake Rotor / Wear Noise</option>
                   <option value="Tire">Tire Pressure / Treads</option>
@@ -384,11 +384,11 @@ export default function DriverDashboard({
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[10px] font-mono text-slate-400 tracking-wider block">SEVERITY LEVEL</label>
+                <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider block">SEVERITY LEVEL</label>
                 <select 
                   value={issueSeverity}
                   onChange={(e) => setIssueSeverity(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 px-3 py-2.5 rounded-xl text-xs font-mono text-white focus:outline-none cursor-pointer"
+                  className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-2.5 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none cursor-pointer"
                 >
                   <option value="low">Low (Next Regular Maintenance)</option>
                   <option value="medium">Medium (Requires Inspection Soon)</option>
@@ -398,13 +398,13 @@ export default function DriverDashboard({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono text-slate-400 tracking-wider block">DETAILED ISSUE DESCRIPTION</label>
+              <label className="text-[10px] font-mono text-slate-600 dark:text-slate-400 tracking-wider block">DETAILED ISSUE DESCRIPTION</label>
               <textarea 
                 rows={3}
                 placeholder="Describe sensory outputs or error codes observed..."
                 value={issueDesc}
                 onChange={(e) => setIssueDesc(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 px-3 py-2.5 rounded-xl text-xs font-mono text-white focus:outline-none placeholder:text-slate-600 resize-none"
+                className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3 py-2.5 rounded-xl text-xs font-mono text-slate-900 dark:text-white focus:outline-none placeholder:text-slate-600 resize-none"
               />
             </div>
 
@@ -418,13 +418,13 @@ export default function DriverDashboard({
         </div>
 
         {/* Card 4: Charging logs and receipts */}
-        <div className="bg-[#090b1c]/85 backdrop-blur-xl p-6 rounded-3xl border border-slate-800 flex flex-col gap-4">
-          <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
-            <span className="text-xs font-mono font-bold tracking-wider text-slate-200 flex items-center gap-2">
+        <div className="bg-white/85 dark:bg-[#090b1c]/85 backdrop-blur-xl p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col gap-4">
+          <div className="border-b border-slate-200 dark:border-slate-800 pb-3 flex items-center justify-between">
+            <span className="text-xs font-mono font-bold tracking-wider text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <Fuel className="w-4 h-4 text-emerald-500" />
               CHARGING & FUEL RECEIPT LOGS
             </span>
-            <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-400">
+            <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
               Driver Wallet
             </span>
           </div>
@@ -437,11 +437,11 @@ export default function DriverDashboard({
             
             <div className="grid grid-cols-2 gap-2 text-[10px]">
               <div className="space-y-1">
-                <span className="font-mono text-slate-400 block">VEHICLE</span>
+                <span className="font-mono text-slate-600 dark:text-slate-400 block">VEHICLE</span>
                 <select 
                   value={newLogVehicle} 
                   onChange={(e) => setNewLogVehicle(e.target.value)}
-                  className="bg-slate-950 border border-slate-800 px-2 py-1 rounded w-full text-slate-200 text-xs font-mono cursor-pointer"
+                  className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-2 py-1 rounded w-full text-slate-800 dark:text-slate-200 text-xs font-mono cursor-pointer"
                 >
                   {vehicles.map(v => (
                     <option key={v.id} value={v.id}>{v.id} ({v.name.split(" ")[0]})</option>
@@ -450,13 +450,13 @@ export default function DriverDashboard({
               </div>
 
               <div className="space-y-1">
-                <span className="font-mono text-slate-400 block">TOTAL COST ($)</span>
+                <span className="font-mono text-slate-600 dark:text-slate-400 block">TOTAL COST ($)</span>
                 <input 
                   type="text" 
                   placeholder="e.g. 45.50" 
                   value={newLogCost}
                   onChange={(e) => setNewLogCost(e.target.value)}
-                  className="bg-slate-950 border border-slate-800 px-2 py-1 rounded w-full text-slate-200 placeholder:text-slate-600 text-xs font-mono"
+                  className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-2 py-1 rounded w-full text-slate-800 dark:text-slate-200 placeholder:text-slate-600 text-xs font-mono"
                 />
               </div>
             </div>
@@ -467,7 +467,7 @@ export default function DriverDashboard({
                 placeholder="e.g. 85 kWh or 45 Gal" 
                 value={newLogAmount}
                 onChange={(e) => setNewLogAmount(e.target.value)}
-                className="bg-slate-950 border border-slate-800 px-2 py-1 rounded flex-1 text-slate-200 placeholder:text-slate-600 text-xs font-mono"
+                className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-2 py-1 rounded flex-1 text-slate-800 dark:text-slate-200 placeholder:text-slate-600 text-xs font-mono"
               />
               <button 
                 type="submit"
@@ -485,23 +485,23 @@ export default function DriverDashboard({
               return (
                 <div 
                   key={log.id} 
-                  className="p-2.5 bg-slate-950/40 rounded-xl border border-slate-800/60 text-xs font-mono flex items-center justify-between"
+                  className="p-2.5 bg-slate-50/40 dark:bg-slate-950/40 rounded-xl border border-slate-200 dark:border-slate-800/60 text-xs font-mono flex items-center justify-between"
                 >
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-slate-200 text-[10px]">
+                      <span className="font-bold text-slate-800 dark:text-slate-200 text-[10px]">
                         {targetV ? targetV.name.split(" ")[0] : log.vehicleId}
                       </span>
-                      <span className="text-[8px] bg-slate-900 border border-slate-800 px-1 py-0.2 rounded text-slate-500">
+                      <span className="text-[8px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-1 py-0.2 rounded text-slate-600 dark:text-slate-400">
                         {log.id}
                       </span>
                     </div>
-                    <p className="text-[9px] text-slate-500">{log.location} // {log.date}</p>
+                    <p className="text-[9px] text-slate-600 dark:text-slate-400">{log.location} // {log.date}</p>
                   </div>
 
                   <div className="text-right">
                     <span className="text-[10px] text-emerald-400 block font-bold">${log.cost.toFixed(2)}</span>
-                    <span className="text-[8.5px] text-slate-400 block">{log.amountAdded}</span>
+                    <span className="text-[8.5px] text-slate-600 dark:text-slate-400 block">{log.amountAdded}</span>
                   </div>
                 </div>
               );
