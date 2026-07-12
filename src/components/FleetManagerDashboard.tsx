@@ -157,7 +157,7 @@ export default function FleetManagerDashboard({
     playSound("launch");
     const newTripId = `TRIP-${Math.floor(100 + Math.random() * 900)}`;
 
-    const newTrip: Trip = {
+    const newTrip = {
       id: newTripId,
       source: sourceHub,
       destination: destinationHub,
@@ -165,23 +165,26 @@ export default function FleetManagerDashboard({
       vehicleId: selectedVehicle,
       cargo: cargoDesc || "General High-Value Freight",
       weight: cargoWeight,
-      progress: 0,
       speed: vehicle.type.includes("Heavy") ? 55 : 65,
     };
 
-    setVehicles((prev) =>
-      prev.map((v) => (v.id === selectedVehicle ? { ...v, status: "on-trip", capacityCurrent: cargoWeight } : v))
-    );
-    setDrivers((prev) =>
-      prev.map((d) => (d.id === selectedDriver ? { ...d, status: "on-trip" } : d))
-    );
-
-    setActiveTrips((prev) => [...prev, newTrip]);
-    addToast(`TRANSIT DISPATCH COMPLETED: ${newTripId} launched successfully. Cargo: ${newTrip.cargo}.`, "success");
-    setIsDispatching(false);
-
-    setCargoDesc("");
-    setCargoWeight(5000);
+    fetch("/api/trips", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newTrip),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to launch dispatch");
+        addToast(`TRANSIT DISPATCH COMPLETED: ${newTripId} launched successfully. Cargo: ${newTrip.cargo}.`, "success");
+        setIsDispatching(false);
+        setCargoDesc("");
+        setCargoWeight(5000);
+      })
+      .catch((err) => {
+        playSound("error");
+        addToast(err.message || "Failed to dispatch trip", "error");
+      });
   };
 
   return (

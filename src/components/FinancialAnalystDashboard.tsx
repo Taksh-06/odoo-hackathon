@@ -91,34 +91,59 @@ export default function FinancialAnalystDashboard({
 
     if (logType === "fuel") {
       const logId = `F-${Math.floor(500 + Math.random() * 500)}`;
-      const newLog: FuelLog = {
-        id: logId,
-        vehicleId: selectedVehId,
-        date: "Just Now",
-        amountAdded: expenseQty || "50 Gal",
-        cost: costNum,
-        location: "Analyst Audit Log"
-      };
-      setFuelLogs(prev => [newLog, ...prev]);
-      addToast(`EXPENSE AUDIT: Logged fuel charge of $${costNum.toFixed(2)} to ${targetV.name}`, "success");
+      fetch("/api/fuel-logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: logId,
+          vehicleId: selectedVehId,
+          date: "Just Now",
+          amountAdded: expenseQty || "50 Gal",
+          cost: costNum,
+          location: "Analyst Audit Log"
+        })
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to submit fuel log");
+          addToast(`EXPENSE AUDIT: Logged fuel charge of $${costNum.toFixed(2)} to ${targetV.name}`, "success");
+          playSound("success");
+          setExpenseCost("");
+          setExpenseDesc("");
+          setExpenseQty("");
+        })
+        .catch((err) => {
+          playSound("error");
+          addToast(err.message || "Failed to log expense", "error");
+        });
     } else {
       const logId = `M-${Math.floor(500 + Math.random() * 500)}`;
-      const newMaint: MaintenanceLog = {
-        id: logId,
-        vehicleId: selectedVehId,
-        date: "Just Now",
-        description: `[Finance Audit] ${expenseDesc}`,
-        cost: costNum,
-        status: "Completed"
-      };
-      setMaintenanceLogs(prev => [newMaint, ...prev]);
-      addToast(`EXPENSE AUDIT: Logged maintenance bill of $${costNum.toFixed(2)} to ${targetV.name}`, "success");
+      fetch("/api/maintenance-logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: logId,
+          vehicleId: selectedVehId,
+          date: "Just Now",
+          description: `[Finance Audit] ${expenseDesc}`,
+          cost: costNum,
+          status: "Completed"
+        })
+      })
+        .then(async (res) => {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to submit maintenance log");
+          addToast(`EXPENSE AUDIT: Logged maintenance bill of $${costNum.toFixed(2)} to ${targetV.name}`, "success");
+          playSound("success");
+          setExpenseCost("");
+          setExpenseDesc("");
+          setExpenseQty("");
+        })
+        .catch((err) => {
+          playSound("error");
+          addToast(err.message || "Failed to log expense", "error");
+        });
     }
-
-    playSound("success");
-    setExpenseCost("");
-    setExpenseDesc("");
-    setExpenseQty("");
   };
 
   return (

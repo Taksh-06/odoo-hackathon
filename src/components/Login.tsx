@@ -4,17 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { playSound } from "../types";
 
 interface LoginProps {
-  onLogin: (email: string, role: "manager" | "driver" | "safety" | "finance") => void;
+  onLogin: (email: string, password: string, role: "manager" | "driver" | "safety" | "finance") => Promise<boolean>;
   addToast: (message: string, type: "success" | "error" | "warning" | "info") => void;
 }
 
 export default function Login({ onLogin, addToast }: LoginProps) {
   const navigate = useNavigate();
   const [loginEmail, setLoginEmail] = useState<string>("ronakskaka08@gmail.com");
-  const [loginPassword, setLoginPassword] = useState<string>("••••••••");
+  const [loginPassword, setLoginPassword] = useState<string>("password");
   const [loginRole, setLoginRole] = useState<"manager" | "driver" | "safety" | "finance">("manager");
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     playSound("click");
 
@@ -24,10 +24,10 @@ export default function Login({ onLogin, addToast }: LoginProps) {
       return;
     }
 
-    onLogin(loginEmail, loginRole);
-    playSound("success");
-    addToast(`SECURE SESSION REIFIED: Access granted for Operator (${loginEmail}). Protocol level: ${loginRole.toUpperCase()}`, "success");
-    navigate("/dashboard");
+    const success = await onLogin(loginEmail, loginPassword, loginRole);
+    if (success) {
+      navigate("/dashboard");
+    }
   };
 
   return (

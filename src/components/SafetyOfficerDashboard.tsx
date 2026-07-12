@@ -34,45 +34,33 @@ export default function SafetyOfficerDashboard({
   // --- ACTIONS: SUSPEND / RECONCILE CDL CREDENTIALS ---
   const handleToggleSuspension = (driverId: string) => {
     playSound("click");
-    let targetName = "";
-    let isNowSuspended = false;
+    const d = drivers.find((driver) => driver.id === driverId);
+    if (!d) return;
 
-    setDrivers((prev) =>
-      prev.map((d) => {
-        if (d.id === driverId) {
-          targetName = d.name;
-          const isCurrentlySuspended = d.status === "suspended";
-          isNowSuspended = !isCurrentlySuspended;
-          
-          let nextStatus: "available" | "on-trip" | "suspended" = isNowSuspended ? "suspended" : "available";
-          let nextLicense = d.licenseType;
+    const isCurrentlySuspended = d.status === "suspended";
+    const nextStatus = isCurrentlySuspended ? "available" : "suspended";
 
-          if (isNowSuspended) {
-            if (!nextLicense.includes("(Suspended)")) {
-              nextLicense = `${nextLicense} (Suspended)`;
-            }
-          } else {
-            nextLicense = nextLicense.replace(" (Suspended)", "");
-          }
-
-          return {
-            ...d,
-            status: nextStatus,
-            licenseType: nextLicense,
-            hoursRemaining: isNowSuspended ? 0.0 : 14.0
-          };
+    fetch(`/api/drivers/${driverId}/status`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: nextStatus }),
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to update driver status");
+        
+        if (nextStatus === "suspended") {
+          playSound("error");
+          addToast(`SAFETY PROTOCOL: CDL Credentials revoked for ${d.name} (${driverId}). Driver suspended.`, "error");
+        } else {
+          playSound("success");
+          addToast(`COMPLIANCE APPR: CDL Credentials reinstated for ${d.name} (${driverId}).`, "success");
         }
-        return d;
       })
-    );
-
-    if (isNowSuspended) {
-      playSound("error");
-      addToast(`SAFETY PROTOCOL: CDL Credentials revoked for ${targetName} (${driverId}). Driver suspended.`, "error");
-    } else {
-      playSound("success");
-      addToast(`COMPLIANCE APPR: CDL Credentials reinstated for ${targetName} (${driverId}).`, "success");
-    }
+      .catch((err) => {
+        playSound("error");
+        addToast(err.message || "Failed to toggle driver suspension", "error");
+      });
   };
 
   // --- STATS FOR COMPLIANCE BOARD ---

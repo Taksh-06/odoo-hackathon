@@ -22,7 +22,9 @@ import {
   FuelLog, 
   MaintenanceLog, 
   Toast, 
-  playSound 
+  playSound,
+  Expense,
+  Document
 } from "./types";
 import FleetManagerDashboard from "./components/FleetManagerDashboard";
 import DriverDashboard from "./components/DriverDashboard";
@@ -72,11 +74,13 @@ const INITIAL_MAINTENANCE_LOGS: MaintenanceLog[] = [
 
 export default function App() {
   // --- STATE ENGINES ---
-  const [vehicles, setVehicles] = useState<Vehicle[]>(INITIAL_VEHICLES);
-  const [drivers, setDrivers] = useState<Driver[]>(INITIAL_DRIVERS);
-  const [activeTrips, setActiveTrips] = useState<Trip[]>(INITIAL_TRIPS);
-  const [fuelLogs, setFuelLogs] = useState<FuelLog[]>(INITIAL_FUEL_LOGS);
-  const [maintenanceLogs, setMaintenanceLogs] = useState<MaintenanceLog[]>(INITIAL_MAINTENANCE_LOGS);
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [activeTrips, setActiveTrips] = useState<Trip[]>([]);
+  const [fuelLogs, setFuelLogs] = useState<FuelLog[]>([]);
+  const [maintenanceLogs, setMaintenanceLogs] = useState<MaintenanceLog[]>([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [documents, setDocuments] = useState<Document[]>([]);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   // --- AUTHENTICATION STATES ---
@@ -101,45 +105,53 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // --- TRANSIT PIPELINE RADAR PROGRESS SIMULATOR ---
+  // --- SYNC ENGINE (POLLING STATE FROM BACKEND) ---
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTrips((prevTrips) => {
-        const nextTrips = prevTrips.map((trip) => {
-          if (trip.progress < 100) {
-            const increment = parseFloat((Math.random() * 1.5 + 0.8).toFixed(1));
-            const nextProgress = Math.min(100, trip.progress + increment);
-            return { ...trip, progress: nextProgress };
-          }
-          return trip;
-        });
+    if (!isAuthenticated) return;
 
-        // Trigger safety releases on completion
-        nextTrips.forEach((trip) => {
-          if (trip.progress >= 100 && !trip.completedTriggered) {
-            trip.completedTriggered = true;
-            
-            setVehicles((vPrev) =>
-              vPrev.map((v) => (v.id === trip.vehicleId ? { ...v, status: "available", capacityCurrent: 0 } : v))
-            );
-            setDrivers((dPrev) =>
-              dPrev.map((d) => (d.id === trip.driverId ? { ...d, status: "available" } : d))
-            );
+    const fetchState = async () => {
+      try {
+        const res = await fetch("/api/bootstrap");
+        if (!res.ok) throw new Error("API health failure");
+        const data = await res.json();
 
+        setVehicles(data.vehicles);
+        setDrivers(data.drivers);
+        
+        // Handle completed trip triggers (toasts/sounds)
+        const updatedTrips = data.activeTrips;
+        updatedTrips.forEach(async (trip: Trip) => {
+          if (trip.progress >= 100 && trip.completedTriggered) {
             addToast(
               `Trip TRIP-${trip.id.split("-")[1]} from ${trip.source} to ${trip.destination} has reached destination. Payload secure.`,
               "success"
             );
             playSound("success");
+
+            // Acknowledge completion to the server
+            try {
+              await fetch(`/api/trips/${trip.id}/ack-complete`, { method: "POST" });
+            } catch (err) {
+              console.error("Failed to ack trip completion:", err);
+            }
           }
         });
 
-        return nextTrips.filter((t) => t.progress < 100);
-      });
-    }, 1500);
+        // Filter active trips (progress < 100) locally to keep matching state expectations
+        setActiveTrips(updatedTrips.filter((t: Trip) => t.progress < 100));
+        setFuelLogs(data.fuelLogs);
+        setMaintenanceLogs(data.maintenanceLogs);
+        setExpenses(data.expenses);
+        setDocuments(data.documents);
+      } catch (err) {
+        console.error("Sync error:", err);
+      }
+    };
 
+    fetchState();
+    const interval = setInterval(fetchState, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isAuthenticated]);
 
   // --- TOAST SERVICE ---
   const addToast = (message: string, type: "success" | "error" | "warning" | "info") => {
@@ -155,7 +167,7 @@ export default function App() {
   };
 
   // --- GLOBAL MUTATOR ACTIONS ---
-  const triggerEmergencyRepair = (vehicleId: string) => {
+  const triggerEmergencyRepair = async (vehicleId: string) => {
     playSound("click");
     const v = vehicles.find((v) => v.id === vehicleId);
     if (!v) return;
@@ -171,43 +183,70 @@ export default function App() {
       return;
     }
 
-    setVehicles((prev) =>
-      prev.map((item) => (item.id === vehicleId ? { ...item, status: "in-shop" } : item))
-    );
+    try {
+      const res = await fetch("/api/vehicles/emergency-repair", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ vehicleId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
 
-    const mId = `M-${Math.floor(600 + Math.random() * 400)}`;
-    const newMaint: MaintenanceLog = {
-      id: mId,
-      vehicleId,
-      date: "Urgent (Today)",
-      description: "Sensor Malfunction & Critical Powertrain Overhaul",
-      cost: 2450.00,
-      status: "In-Shop",
-    };
-
-    setMaintenanceLogs((prev) => [newMaint, ...prev]);
-    addToast(`MAINTENANCE REDIRECT: ${v.name} pulled from operations into maintenance. Repair log initialized.`, "warning");
+      addToast(`MAINTENANCE REDIRECT: ${v.name} pulled from operations into maintenance. Repair log initialized.`, "warning");
+    } catch (err: any) {
+      playSound("error");
+      addToast(err.message || "Failed to trigger emergency repair.", "error");
+    }
   };
 
-  const resolveMaintenance = (maintId: string, vehicleId: string) => {
+  const resolveMaintenance = async (maintId: string, vehicleId: string) => {
     playSound("click");
-    setMaintenanceLogs((prev) =>
-      prev.map((m) => (m.id === maintId ? { ...m, status: "Completed" } : m))
-    );
-    setVehicles((prev) =>
-      prev.map((v) => (v.id === vehicleId ? { ...v, status: "available", fuelLevel: 100 } : v))
-    );
-    addToast(`MAINTENANCE COMPLETED: Vehicle ${vehicleId} certified road-ready. Returned to operational fleet.`, "success");
-    playSound("success");
+    try {
+      const res = await fetch("/api/maintenance/resolve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ maintId, vehicleId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      addToast(`MAINTENANCE COMPLETED: Vehicle ${vehicleId} certified road-ready. Returned to operational fleet.`, "success");
+      playSound("success");
+    } catch (err: any) {
+      playSound("error");
+      addToast(err.message || "Failed to resolve maintenance.", "error");
+    }
   };
 
   // --- AUTH SUBMIT ---
-  const handleLogin = (email: string, role: "manager" | "driver" | "safety" | "finance") => {
-    setIsAuthenticated(true);
-    const userObj = { email, role };
-    setCurrentUser(userObj);
-    localStorage.setItem("transitops_auth", "true");
-    localStorage.setItem("transitops_user", JSON.stringify(userObj));
+  const handleLogin = async (email: string, password: string, role: "manager" | "driver" | "safety" | "finance"): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        playSound("error");
+        addToast(data.error || "Login validation failed.", "error");
+        return false;
+      }
+
+      setIsAuthenticated(true);
+      const userObj = { email: data.user.email, role: data.user.role };
+      setCurrentUser(userObj);
+      localStorage.setItem("transitops_auth", "true");
+      localStorage.setItem("transitops_user", JSON.stringify(userObj));
+      playSound("success");
+      addToast(`SECURE SESSION REIFIED: Access granted for Operator (${data.user.email}). Protocol level: ${data.user.role.toUpperCase()}`, "success");
+      return true;
+    } catch (err) {
+      playSound("error");
+      addToast("Failed to connect to authentication server.", "error");
+      return false;
+    }
   };
 
   const handleLogOut = () => {

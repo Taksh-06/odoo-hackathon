@@ -66,6 +66,25 @@ export interface MaintenanceLog {
   status: "Completed" | "In-Shop" | "Scheduled";
 }
 
+export interface Expense {
+  id: string;
+  description: string;
+  amount: number;
+  category: string;
+  date: string;
+  vehicleId?: string;
+}
+
+export interface Document {
+  id: string;
+  title: string;
+  type: string;
+  url: string;
+  uploadDate: string;
+  driverId?: string;
+  vehicleId?: string;
+}
+
 export interface Toast {
   id: string;
   message: string;
@@ -105,7 +124,7 @@ export const playSound = (type: "click" | "success" | "error" | "ambient" | "lau
     const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
     if (!AudioContext) return;
     const ctx = new AudioContext();
-    
+
     if (type === "click") {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
