@@ -28,6 +28,9 @@ function mapKeysToCamel(obj: any): any {
 // --- BOOTSTRAP API ---
 app.get("/api/bootstrap", async (req, res) => {
     try {
+        // Trigger serverless progress update step
+        await runTripSimulation();
+
         const vehiclesQuery = await pool.query("SELECT * FROM vehicles ORDER BY id");
         const driversQuery = await pool.query("SELECT * FROM drivers ORDER BY id");
         // Get active trips: progress < 100 or recently completed trips (completed_triggered = TRUE)
@@ -333,12 +336,8 @@ app.post("/api/documents", async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-// --- START SERVER ---
-app.listen(PORT, () => {
-    console.log(`TransitOps Express Backend running on port ${PORT}`);
-});
 // ==================== BACKGROUND TRIP PROGRESS SIMULATION ENGINE ====================
-setInterval(async () => {
+export async function runTripSimulation() {
     try {
         // Select trips that are active (progress < 100)
         const activeTripsQuery = await pool.query("SELECT * FROM trips WHERE progress < 100");
@@ -387,4 +386,18 @@ setInterval(async () => {
     } catch (err: any) {
         console.error("Error in Trip Simulation background loop:", err.message);
     }
-}, 1500);
+}
+
+// Only run interval background worker locally, not in serverless environment
+if (!process.env.VERCEL) {
+    setInterval(runTripSimulation, 3000);
+}
+
+// --- START SERVER ---
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`TransitOps Express Backend running on port ${PORT}`);
+    });
+}
+
+export default app;
